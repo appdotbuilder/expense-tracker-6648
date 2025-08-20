@@ -10,6 +10,16 @@ import { trpc } from '@/utils/trpc';
 import type { ExpenseSummary, MonthlySummary, ExpenseCategory, PaymentMethod } from '../../../server/src/schema';
 import type { CategoryTotal } from '../../../server/src/handlers/get_category_totals';
 
+// Currency formatting utility for Indonesian Rupiah
+const formatIDR = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+};
+
 const categoryOptions: { value: ExpenseCategory; label: string; emoji: string }[] = [
   { value: 'eat', label: 'Food & Dining', emoji: '🍽️' },
   { value: 'shop', label: 'Shopping', emoji: '🛍️' },
@@ -163,7 +173,7 @@ export function ExpenseReports() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
               <div className="text-center p-4 bg-blue-50 rounded-lg">
                 <p className="text-sm text-blue-600 font-medium">Total Amount</p>
-                <p className="text-2xl font-bold text-blue-700">${summary.total_amount.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-blue-700">{formatIDR(summary.total_amount)}</p>
               </div>
               <div className="text-center p-4 bg-green-50 rounded-lg">
                 <p className="text-sm text-green-600 font-medium">Total Transactions</p>
@@ -171,7 +181,7 @@ export function ExpenseReports() {
               </div>
               <div className="text-center p-4 bg-purple-50 rounded-lg">
                 <p className="text-sm text-purple-600 font-medium">Average Amount</p>
-                <p className="text-2xl font-bold text-purple-700">${summary.average_amount.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-purple-700">{formatIDR(summary.average_amount)}</p>
               </div>
             </div>
             
@@ -207,7 +217,7 @@ export function ExpenseReports() {
                         </Badge>
                       </div>
                       <div className="text-right">
-                        <span className="font-bold">${data.total_amount.toFixed(2)}</span>
+                        <span className="font-bold">{formatIDR(data.total_amount)}</span>
                         <span className="text-sm text-gray-500 ml-2">
                           ({percentage.toFixed(1)}%)
                         </span>
@@ -246,7 +256,7 @@ export function ExpenseReports() {
                         </Badge>
                       </div>
                       <div className="text-right">
-                        <span className="font-bold">${categoryData.total_amount.toFixed(2)}</span>
+                        <span className="font-bold">{formatIDR(categoryData.total_amount)}</span>
                         <span className="text-sm text-gray-500 ml-2">
                           ({categoryData.percentage.toFixed(1)}%)
                         </span>
@@ -286,7 +296,7 @@ export function ExpenseReports() {
                         </Badge>
                       </div>
                       <div className="text-right">
-                        <span className="font-bold">${data.total_amount.toFixed(2)}</span>
+                        <span className="font-bold">{formatIDR(data.total_amount)}</span>
                         <span className="text-sm text-gray-500 ml-2">
                           ({percentage.toFixed(1)}%)
                         </span>
@@ -321,7 +331,7 @@ export function ExpenseReports() {
                       })}
                     </h4>
                     <div className="text-right">
-                      <p className="font-bold text-lg">${monthly.total_amount.toFixed(2)}</p>
+                      <p className="font-bold text-lg">{formatIDR(monthly.total_amount)}</p>
                       <p className="text-sm text-gray-600">{monthly.total_count} transactions</p>
                     </div>
                   </div>
@@ -333,7 +343,7 @@ export function ExpenseReports() {
                         return (
                           <div key={category} className="text-center p-2 bg-white rounded">
                             <div className="text-lg">{categoryOption?.emoji}</div>
-                            <div className="text-xs text-gray-600">${data.total_amount.toFixed(0)}</div>
+                            <div className="text-xs text-gray-600">{formatIDR(data.total_amount)}</div>
                           </div>
                         );
                       })}

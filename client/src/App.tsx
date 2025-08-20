@@ -10,6 +10,16 @@ import { ExpenseFilters } from '@/components/ExpenseFilters';
 import { ExpenseReports } from '@/components/ExpenseReports';
 import type { Expense, ExpenseFilter, CreateExpenseInput } from '../../server/src/schema';
 
+// Currency formatting utility for Indonesian Rupiah
+const formatIDR = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+};
+
 function App() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,7 +109,7 @@ function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-100 text-sm font-medium">Total Expenses</p>
-                  <p className="text-3xl font-bold">${totalExpenses.toFixed(2)}</p>
+                  <p className="text-3xl font-bold">{formatIDR(totalExpenses)}</p>
                 </div>
                 <div className="text-4xl opacity-80">📊</div>
               </div>
@@ -124,7 +134,7 @@ function App() {
                 <div>
                   <p className="text-purple-100 text-sm font-medium">Average Expense</p>
                   <p className="text-3xl font-bold">
-                    ${expenses.length > 0 ? (totalExpenses / expenses.length).toFixed(2) : '0.00'}
+                    {expenses.length > 0 ? formatIDR(totalExpenses / expenses.length) : formatIDR(0)}
                   </p>
                 </div>
                 <div className="text-4xl opacity-80">📈</div>

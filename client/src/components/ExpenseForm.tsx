@@ -7,6 +7,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import type { CreateExpenseInput, ExpenseCategory, PaymentMethod } from '../../../server/src/schema';
 
+// Currency formatting utility for Indonesian Rupiah
+const formatIDR = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+};
+
 interface ExpenseFormProps {
   onSubmit: (data: CreateExpenseInput) => Promise<void>;
   onSuccess?: () => void;
@@ -73,11 +83,11 @@ export function ExpenseForm({ onSubmit, onSuccess, initialData }: ExpenseFormPro
             💰 Amount
           </Label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">Rp</span>
             <Input
               id="amount"
               type="number"
-              step="0.01"
+              step="1"
               min="0"
               value={formData.amount || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -86,8 +96,8 @@ export function ExpenseForm({ onSubmit, onSuccess, initialData }: ExpenseFormPro
                   amount: parseFloat(e.target.value) || 0 
                 }))
               }
-              className="pl-8"
-              placeholder="0.00"
+              className="pl-10"
+              placeholder="0"
               required
             />
           </div>
@@ -208,7 +218,7 @@ export function ExpenseForm({ onSubmit, onSuccess, initialData }: ExpenseFormPro
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-lg font-bold text-red-600">-${formData.amount.toFixed(2)}</p>
+                <p className="text-lg font-bold text-red-600">-{formatIDR(formData.amount)}</p>
                 <p className="text-sm text-gray-500">{formData.date.toLocaleDateString()}</p>
               </div>
             </div>

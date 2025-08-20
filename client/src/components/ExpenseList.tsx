@@ -11,6 +11,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { trpc } from '@/utils/trpc';
 import type { Expense, ExpenseCategory, PaymentMethod, UpdateExpenseInput } from '../../../server/src/schema';
 
+// Currency formatting utility for Indonesian Rupiah
+const formatIDR = (amount: number): string => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+};
+
 interface ExpenseListProps {
   expenses: Expense[];
   isLoading: boolean;
@@ -99,7 +109,7 @@ function ExpenseItem({ expense, onUpdate, onDelete }: {
             </div>
           </div>
           <div className="text-right ml-4">
-            <p className="text-xl font-bold text-red-600">-${expense.amount.toFixed(2)}</p>
+            <p className="text-xl font-bold text-red-600">-{formatIDR(expense.amount)}</p>
             <div className="flex items-center gap-2 mt-2">
               <Dialog open={isEditing} onOpenChange={setIsEditing}>
                 <DialogTrigger asChild>
@@ -115,10 +125,10 @@ function ExpenseItem({ expense, onUpdate, onDelete }: {
                     <div className="space-y-2">
                       <Label>Amount</Label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">Rp</span>
                         <Input
                           type="number"
-                          step="0.01"
+                          step="1"
                           min="0"
                           value={editData.amount || ''}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -127,7 +137,7 @@ function ExpenseItem({ expense, onUpdate, onDelete }: {
                               amount: parseFloat(e.target.value) || 0 
                             }))
                           }
-                          className="pl-8"
+                          className="pl-10"
                         />
                       </div>
                     </div>
@@ -239,7 +249,7 @@ function ExpenseItem({ expense, onUpdate, onDelete }: {
                       Are you sure you want to delete this expense? This action cannot be undone.
                       <div className="mt-3 p-3 bg-gray-50 rounded-md">
                         <p className="font-medium">{expense.description}</p>
-                        <p className="text-sm text-gray-600">Amount: ${expense.amount.toFixed(2)}</p>
+                        <p className="text-sm text-gray-600">Amount: {formatIDR(expense.amount)}</p>
                       </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>

@@ -96,31 +96,31 @@ export function ExpenseFilters({ filters, onFiltersChange }: ExpenseFiltersProps
         <Label className="text-sm font-medium">💰 Amount Range</Label>
         <div className="flex gap-2">
           <div className="relative flex-1">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">$</span>
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">Rp</span>
             <Input
               type="number"
-              step="0.01"
+              step="1"
               min="0"
               placeholder="Min"
               value={filters.min_amount || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 updateFilter('min_amount', e.target.value ? parseFloat(e.target.value) : undefined)
               }
-              className="pl-8"
+              className="pl-10"
             />
           </div>
           <div className="relative flex-1">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">$</span>
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">Rp</span>
             <Input
               type="number"
-              step="0.01"
+              step="1"
               min="0"
               placeholder="Max"
               value={filters.max_amount || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 updateFilter('max_amount', e.target.value ? parseFloat(e.target.value) : undefined)
               }
-              className="pl-8"
+              className="pl-10"
             />
           </div>
         </div>
