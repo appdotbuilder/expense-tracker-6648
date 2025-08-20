@@ -1,7 +1,19 @@
+import { db } from '../db';
+import { expensesTable } from '../db/schema';
+import { eq } from 'drizzle-orm';
+
 export const deleteExpense = async (id: number): Promise<boolean> => {
-    // This is a placeholder declaration! Real code should be implemented here.
-    // The goal of this handler is deleting an expense from the database by ID.
-    // It should return true if the expense was successfully deleted,
-    // or false if the expense with the given ID was not found.
-    return Promise.resolve(false);
+  try {
+    // Delete expense record by ID
+    const result = await db.delete(expensesTable)
+      .where(eq(expensesTable.id, id))
+      .returning()
+      .execute();
+
+    // Return true if expense was found and deleted, false otherwise
+    return result.length > 0;
+  } catch (error) {
+    console.error('Expense deletion failed:', error);
+    throw error;
+  }
 };
